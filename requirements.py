@@ -16,3 +16,5 @@ typing_extensions==4.12.2
 tzdata==2024.2
 vine==5.1.0
 wcwidth==0.2.13
+isort==5.13.2
+black==24.10.0
