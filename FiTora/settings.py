@@ -45,9 +45,11 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "product_catelog",
     "rest_framework",
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -55,6 +57,15 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    
+]
+
+# Allow CORS from all domains (for development purposes)
+CORS_ALLOW_ALL_ORIGINS = True  # This can be used during development, but should be restricted for production
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # React app running locally
 ]
 
 ROOT_URLCONF = "FiTora.urls"
