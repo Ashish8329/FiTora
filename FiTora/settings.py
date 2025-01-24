@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 import environ
@@ -46,10 +47,11 @@ INSTALLED_APPS = [
     "product_catelog",
     "rest_framework",
     "corsheaders",
+    "storages",
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -57,11 +59,12 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    
 ]
 
 # Allow CORS from all domains (for development purposes)
-CORS_ALLOW_ALL_ORIGINS = True  # This can be used during development, but should be restricted for production
+CORS_ALLOW_ALL_ORIGINS = (
+    True  # This can be used during development, but should be restricted for production
+)
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_ORIGINS = [
@@ -140,6 +143,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = "static/"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -147,7 +152,21 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Base url to serve media files
-MEDIA_URL = '/media/'
+MEDIA_URL = "media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 
-# Path where media is stored'
-MEDIA_ROOT = BASE_DIR / 'media'
+# aws configuration
+AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
+AWS_STATIC_STORAGE_BUCKET_NAME = os.getenv("AWS_STATIC_STORAGE_BUCKET_NAME")
+AWS_DEFAULT_REGION = os.getenv("AWS_DEFAULT_REGION")
+
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+    },
+    "staticfiles": {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+    },
+}
